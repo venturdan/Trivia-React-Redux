@@ -1,7 +1,10 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import validator from 'validator';
+import { connect } from 'react-redux';
+import { fetchUserToken } from '../Redux/Actions/indexActions';
 
-export default class Login extends Component {
+class Login extends Component {
   state = {
     name: '',
     email: '',
@@ -11,8 +14,16 @@ export default class Login extends Component {
     this.setState({ [name]: type === 'checkbox' ? checked : value });
   };
 
+  loginClick = (evt) => {
+    const { dispatch, history } = this.props;
+    evt.preventDefault();
+    dispatch(fetchUserToken());
+    history.push('/game');
+  };
+
   render() {
     const { name, email } = this.state;
+
     return (
       <form>
         <h3>Login</h3>
@@ -35,9 +46,7 @@ export default class Login extends Component {
         <button
           data-testid="btn-play"
           type="button"
-          onClick={ (evt) => {
-            evt.preventDefault();
-          } }
+          onClick={ this.loginClick }
           disabled={ !name || !validator.isEmail(email) }
         >
           Play
@@ -46,3 +55,9 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  dispatch: PropTypes.func,
+}.isRequired;
+
+export default connect()(Login);
