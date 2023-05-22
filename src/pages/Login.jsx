@@ -14,13 +14,12 @@ class Login extends Component {
     this.setState({ [name]: type === 'checkbox' ? checked : value });
   };
 
-  loginClick = (evt) => {
+  loginClick = async (evt) => {
     const { dispatch, history } = this.props;
     evt.preventDefault();
     dispatch(login(this.state));
-    dispatch(fetchUserToken());
-    const token = localStorage.getItem('token');
-    dispatch(fetchQuestions(token));
+    await dispatch(fetchUserToken());
+    dispatch(fetchQuestions(localStorage.getItem('token')));
     history.push('/game');
   };
 

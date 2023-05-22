@@ -17,26 +17,22 @@ export const login = (payload) => ({
   payload,
 });
 
-// Fetch segundo endpoint
-
-const minQuestions = 5;
-
-// Fetch primeiro endpoint
 export const fetchUserToken = () => async (dispatch) => {
   const URL = 'https://opentdb.com/api_token.php?command=request';
   const response = await fetch(URL);
   const data = await response.json();
   dispatch(saveToken(data.token));
   localStorage.setItem('token', data.token);
-  return data.token;
 };
 
+const minQuestions = 5;
 export const fetchQuestions = (token, amount = minQuestions) => async (dispatch) => {
   const URLcomToken = `https://opentdb.com/api.php?amount=${amount}&token=${token}`;
   const response = await fetch(URLcomToken);
   const data = await response.json();
   dispatch(saveQuestions(data.results));
 };
+
 // {
 //   "response_code":0,
 //   "results":[
