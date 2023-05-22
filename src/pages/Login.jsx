@@ -25,26 +25,35 @@ class Login extends Component {
 
   render() {
     const { name, email } = this.state;
+    const { history } = this.props;
 
     return (
       <form>
         <h3>Login</h3>
-        <input
-          data-testid="input-player-name"
-          type="text"
-          name="name"
-          placeholder="Digite seu nome"
-          value={ name }
-          onChange={ this.handleChange }
-        />
-        <input
-          data-testid="input-gravatar-email"
-          type="email"
-          name="email"
-          placeholder="Digite seu email gravatar"
-          value={ email }
-          onChange={ this.handleChange }
-        />
+        <label htmlFor="name">
+          <p>Player Name</p>
+          <input
+            data-testid="input-player-name"
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Type your name"
+            value={ name }
+            onChange={ this.handleChange }
+          />
+        </label>
+        <label htmlFor="email">
+          <p>Gravatar Email</p>
+          <input
+            id="email"
+            data-testid="input-gravatar-email"
+            type="email"
+            name="email"
+            placeholder="Type your gravatar email"
+            value={ email }
+            onChange={ this.handleChange }
+          />
+        </label>
         <button
           data-testid="btn-play"
           type="button"
@@ -52,6 +61,16 @@ class Login extends Component {
           disabled={ !name || !validator.isEmail(email) }
         >
           Play
+        </button>
+        <button
+          data-testid="btn-settings"
+          type="button"
+          onClick={ (evt) => {
+            evt.preventDefault();
+            history.push('/settings');
+          } }
+        >
+          Settings
         </button>
       </form>
     );
