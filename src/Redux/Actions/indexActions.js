@@ -11,7 +11,6 @@ export const saveQuestions = (payload) => ({
   type: SAVE_QUESTIONS,
   payload,
 });
-// Fetch primeiro endpoint
 
 export const login = (payload) => ({
   type: LOGIN,
@@ -25,8 +24,6 @@ export const fetchUserToken = () => async (dispatch) => {
   dispatch(saveToken(data.token));
   localStorage.setItem('token', data.token);
 };
-
-// Fetch segundo endpoint
 
 const minQuestions = 5;
 export const fetchQuestions = (token, amount = minQuestions) => async (dispatch) => {

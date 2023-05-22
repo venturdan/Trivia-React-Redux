@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import validator from 'validator';
 import { connect } from 'react-redux';
-import { fetchUserToken, login } from '../Redux/Actions/indexActions';
+import { fetchQuestions, fetchUserToken, login } from '../Redux/Actions/indexActions';
 
 class Login extends Component {
   state = {
@@ -14,11 +14,12 @@ class Login extends Component {
     this.setState({ [name]: type === 'checkbox' ? checked : value });
   };
 
-  loginClick = (evt) => {
+  loginClick = async (evt) => {
     const { dispatch, history } = this.props;
     evt.preventDefault();
     dispatch(login(this.state));
-    dispatch(fetchUserToken());
+    await dispatch(fetchUserToken());
+    dispatch(fetchQuestions(localStorage.getItem('token')));
     history.push('/game');
   };
 
