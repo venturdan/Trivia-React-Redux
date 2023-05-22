@@ -1,6 +1,9 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom/cjs/react-router-dom.min';
 import logo from './trivia.png';
 import './App.css';
+import Login from './pages/Login';
+import Game from './pages/Game';
 
 export default function App() {
   return (
@@ -9,6 +12,10 @@ export default function App() {
         <img src={ logo } className="App-logo" alt="logo" />
         <p>SUA VEZ</p>
       </header>
+      <Switch>
+        <Route exact path="/" component={ Login } />
+        <Route exact path="/game" component={ Game } />
+      </Switch>
     </div>
   );
 }
