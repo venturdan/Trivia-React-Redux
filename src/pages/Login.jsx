@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import validator from 'validator';
 import { connect } from 'react-redux';
-import { fetchUserToken, login } from '../Redux/Actions/indexActions';
+import { fetchQuestions, fetchUserToken, login } from '../Redux/Actions/indexActions';
 
 class Login extends Component {
   state = {
@@ -19,6 +19,8 @@ class Login extends Component {
     evt.preventDefault();
     dispatch(login(this.state));
     dispatch(fetchUserToken());
+    const token = localStorage.getItem('token');
+    dispatch(fetchQuestions(token));
     history.push('/game');
   };
 
