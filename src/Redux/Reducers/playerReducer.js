@@ -10,7 +10,7 @@ export const playerReducer = (state = INITIAL_STATE, { type, payload }) => {
     return {
       ...state,
       name: payload.name,
-      gravatarEmail: payload.gravatarEmail,
+      gravatarEmail: payload.email,
     };
   case 'UPDATE_SCORE':
     return {

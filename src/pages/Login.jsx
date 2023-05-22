@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import validator from 'validator';
 import { connect } from 'react-redux';
-import { fetchUserToken } from '../Redux/Actions/indexActions';
+import { fetchUserToken, login } from '../Redux/Actions/indexActions';
 
 class Login extends Component {
   state = {
@@ -17,6 +17,7 @@ class Login extends Component {
   loginClick = (evt) => {
     const { dispatch, history } = this.props;
     evt.preventDefault();
+    dispatch(login(this.state));
     dispatch(fetchUserToken());
     history.push('/game');
   };

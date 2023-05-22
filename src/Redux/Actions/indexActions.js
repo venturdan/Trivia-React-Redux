@@ -1,5 +1,6 @@
 export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
+export const LOGIN = 'LOGIN';
 
 export const saveToken = (payload) => ({
   type: SAVE_TOKEN,
@@ -11,6 +12,11 @@ export const saveQuestions = (payload) => ({
   payload,
 });
 // Fetch primeiro endpoint
+
+export const login = (payload) => ({
+  type: LOGIN,
+  payload,
+});
 
 export const fetchUserToken = () => async (dispatch) => {
   const URL = 'https://opentdb.com/api_token.php?command=request';
