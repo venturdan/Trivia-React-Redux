@@ -99,7 +99,7 @@ class Game extends Component {
         };
       });
     } else {
-      // Feedback / ranking
+      // Feedback / ranking // evaluator
     }
   };
 
