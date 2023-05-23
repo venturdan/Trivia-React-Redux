@@ -2,6 +2,7 @@ export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
 export const LOGIN = 'LOGIN';
 export const SAVE_TIMER = 'SAVE_TIMER';
+export const UPDATE_SCORE = 'UPDATE_SCORE';
 
 export const saveToken = (payload) => ({
   type: SAVE_TOKEN,
@@ -22,6 +23,13 @@ export const saveTimer = (payload) => ({
 export const login = (payload) => ({
   type: LOGIN,
   payload,
+});
+
+export const updateScore = (score) => ({
+  type: 'UPDATE_SCORE',
+  payload: {
+    score,
+  },
 });
 
 export const fetchUserToken = () => async (dispatch) => {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import Header from '../components/Header';
 
-import { saveTimer } from '../Redux/Actions/indexActions';
+import { saveTimer, updateScore } from '../Redux/Actions/indexActions';
 
 class Game extends Component {
   state = {
@@ -59,7 +59,30 @@ class Game extends Component {
   };
 
   handleAnswerClick = (isCorrect) => {
+    const { timer, dispatch, questions } = this.props;
+    const { index } = this.state;
+    const { difficulty } = questions[index];
+
     this.setState({ selectedAnswer: isCorrect, isCorrect });
+
+    const EASY_MULTIPLIER = 1;
+    const MEDIUM_MULTIPLIER = 2;
+    const HARD_MULTIPLIER = 3;
+    const BASE_POINTS = 10;
+
+    let points = BASE_POINTS;
+
+    if (difficulty === 'hard') {
+      points += timer * HARD_MULTIPLIER;
+    } else if (difficulty === 'medium') {
+      points += timer * MEDIUM_MULTIPLIER;
+    } else {
+      points += timer * EASY_MULTIPLIER;
+    }
+
+    if (isCorrect) {
+      dispatch(updateScore(points));
+    }
   };
 
   handleNextQuestion = () => {
@@ -154,6 +177,7 @@ Game.propTypes = {
       category: propTypes.string,
       correct_answer: propTypes.string.isRequired,
       incorrect_answers: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
+      difficulty: propTypes.string.isRequired,
     }),
   ).isRequired,
   timer: propTypes.number.isRequired,
