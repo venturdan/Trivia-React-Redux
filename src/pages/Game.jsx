@@ -40,17 +40,19 @@ class Game extends Component {
       <section>
         <p data-testid="question-text">{ question }</p>
         <p data-testid="question-category">{ category }</p>
-        {
-          aleatoryAnswers.map((answer) => (
-            <button
-              key={ answer.answer }
-              data-testid={ answer.isCorrect ? 'correct-answer' : 'wrong-answer' }
-            >
-              { answer.answer }
+        <div data-testid="answer-options">
+          {
+            aleatoryAnswers.map((answer) => (
+              <button
+                key={ answer.answer }
+                data-testid={ answer.isCorrect ? 'correct-answer' : 'wrong-answer' }
+              >
+                { answer.answer }
 
-            </button>
-          ))
-        }
+              </button>
+            ))
+          }
+        </div>
       </section>
     );
   }
