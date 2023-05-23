@@ -10,13 +10,13 @@ class Login extends Component {
     email: '',
   };
 
-  handleChange = ({ target: { name, value, checked, type } }) => {
-    this.setState({ [name]: type === 'checkbox' ? checked : value });
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
   };
 
   loginClick = async (evt) => {
-    const { dispatch, history } = this.props;
     evt.preventDefault();
+    const { dispatch, history } = this.props;
     dispatch(login(this.state));
     await dispatch(fetchUserToken());
     dispatch(fetchQuestions(localStorage.getItem('token')));

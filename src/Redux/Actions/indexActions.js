@@ -30,7 +30,7 @@ export const fetchQuestions = (token, amount = minQuestions) => async (dispatch)
   const URLcomToken = `https://opentdb.com/api.php?amount=${amount}&token=${token}`;
   const response = await fetch(URLcomToken);
   const data = await response.json();
-  dispatch(saveQuestions(data.results));
+  dispatch(saveQuestions(data));
 };
 
 // {
