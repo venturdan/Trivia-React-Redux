@@ -1,4 +1,3 @@
-import Login from '../pages/Login';
 import renderWithRouterAndRedux  from './helpers/renderWithRouterAndRedux';
 import userEvent from '@testing-library/user-event';
 import { screen, waitFor } from '@testing-library/react';

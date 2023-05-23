@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
 };
@@ -16,6 +16,7 @@ export const playerReducer = (state = INITIAL_STATE, { type, payload }) => {
     return {
       ...state,
       score: state.score + payload.score,
+      assertions: state.assertions + 1,
     };
   default:
     return state;
