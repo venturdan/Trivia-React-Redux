@@ -1,6 +1,7 @@
 export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
 export const LOGIN = 'LOGIN';
+export const SAVE_TIMER = 'SAVE_TIMER';
 
 export const saveToken = (payload) => ({
   type: SAVE_TOKEN,
@@ -12,6 +13,11 @@ export const saveQuestions = (payload) => ({
   payload,
 });
 // Fetch primeiro endpoint
+
+export const saveTimer = (payload) => ({
+  type: SAVE_TIMER,
+  payload,
+});
 
 export const login = (payload) => ({
   type: LOGIN,
@@ -33,7 +39,6 @@ export const fetchQuestions = (token, amount = minQuestions) => async (dispatch)
   const URLcomToken = `https://opentdb.com/api.php?amount=${amount}&token=${token}`;
   const response = await fetch(URLcomToken);
   const data = await response.json();
-  console.log(data);
   dispatch(saveQuestions(data));
 };
 
