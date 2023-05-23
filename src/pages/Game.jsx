@@ -22,6 +22,7 @@ class Game extends Component {
 
   getAleatoryAnswers = (answers) => {
     const random = 0.5;
+    console.log(answers);
     return [
       {
         answer: answers.correct_answer,
@@ -119,9 +120,8 @@ class Game extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  questions: state.questions.questions,
+  questions: [...state.questions.questions],
 });
-
 Game.propTypes = {
   questions: propTypes.arrayOf(
     propTypes.shape({

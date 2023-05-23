@@ -31,7 +31,7 @@ describe('Testando o componente <Login />', () => {
       gravatarEmail: '',
     },
     token: '',
-    questions: [],
+    questions: {questions: [], response_code: 0},
   }
   
   it('Testa se tem os inputs e o botão de login e a funcionalidade deles', async () => {

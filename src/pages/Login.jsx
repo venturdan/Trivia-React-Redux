@@ -22,7 +22,6 @@ class Login extends Component {
     await dispatch(fetchQuestions(localStorage.getItem('token')));
     const errCode = 3;
     const { responseCode } = this.props;
-    console.log(responseCode);
     if (errCode === responseCode) {
       localStorage.removeItem('token');
       history.push('/');
