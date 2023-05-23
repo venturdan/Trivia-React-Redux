@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import Header from '../components/Header';
 
+import { saveTimer } from '../Redux/Actions/indexActions';
+
 class Game extends Component {
   state = {
     index: 0,
@@ -10,15 +12,36 @@ class Game extends Component {
     isLoading: true,
     selectedAnswer: null,
     isCorrect: null,
+    blockAnswers: false,
   };
 
   componentDidMount() {
+    this.startTimer();
     const { questions } = this.props;
     this.setState(() => ({
       aleatoryAnswers: this.getAleatoryAnswers(questions[0]),
       isLoading: false,
     }));
   }
+
+  startTimer = async () => {
+    const awaitToStart = 5000;
+    setTimeout(() => {
+      const interval = 1000;
+      let { timer } = this.props;
+      const timerCount = setInterval(() => {
+        timer -= 1;
+        const { dispatch } = this.props;
+        dispatch(saveTimer(timer));
+        if (timer === 0) {
+          clearInterval(timerCount);
+          this.setState({
+            blockAnswers: true,
+          });
+        }
+      }, interval);
+    }, awaitToStart);
+  };
 
   getAleatoryAnswers = (answers) => {
     const random = 0.5;
@@ -58,13 +81,14 @@ class Game extends Component {
   };
 
   render() {
-    const { questions } = this.props;
+    const { questions, timer } = this.props;
     const {
       index,
       aleatoryAnswers,
       isLoading,
       selectedAnswer,
       isCorrect,
+      blockAnswers,
     } = this.state;
     const { question, category } = questions[index];
     if (isLoading) {
@@ -74,6 +98,7 @@ class Game extends Component {
       <div>
         <Header />
         <section>
+          <p>{timer}</p>
           <p data-testid="question-text">{question}</p>
           {category && <p data-testid="question-category">{category}</p>}
           <div data-testid="answer-options">
@@ -82,7 +107,6 @@ class Game extends Component {
               const isSelectedAnswer = selectedAnswer !== null;
               const isAnswerChecked = isCorrect !== null;
               let buttonStyle = { border: 'none' };
-
               if (
                 isSelectedAnswer
               && isCorrectAnswer
@@ -103,7 +127,7 @@ class Game extends Component {
                   data-testid={ isCorrectAnswer ? 'correct-answer' : 'wrong-answer' }
                   onClick={ () => this.handleAnswerClick(answer.isCorrect) }
                   style={ buttonStyle }
-                  disabled={ selectedAnswer !== null }
+                  disabled={ selectedAnswer !== null || blockAnswers }
                 >
                   {answer.answer}
                 </button>
@@ -120,7 +144,8 @@ class Game extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  questions: [...state.questions.questions],
+  questions: state.questions.questions,
+  timer: state.timer.timer,
 });
 Game.propTypes = {
   questions: propTypes.arrayOf(
@@ -131,6 +156,8 @@ Game.propTypes = {
       incorrect_answers: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
     }),
   ).isRequired,
+  timer: propTypes.number.isRequired,
+  dispatch: propTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(Game);
