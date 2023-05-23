@@ -10,41 +10,57 @@ class Login extends Component {
     email: '',
   };
 
-  handleChange = ({ target: { name, value, checked, type } }) => {
-    this.setState({ [name]: type === 'checkbox' ? checked : value });
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
   };
 
   loginClick = async (evt) => {
-    const { dispatch, history } = this.props;
     evt.preventDefault();
+    const { dispatch, history } = this.props;
     dispatch(login(this.state));
     await dispatch(fetchUserToken());
-    dispatch(fetchQuestions(localStorage.getItem('token')));
-    history.push('/game');
+    await dispatch(fetchQuestions(localStorage.getItem('token')));
+    const errCode = 3;
+    const { responseCode } = this.props;
+    if (errCode === responseCode) {
+      localStorage.removeItem('token');
+      history.push('/');
+    } else {
+      history.push('/game');
+    }
   };
 
   render() {
     const { name, email } = this.state;
+    const { history } = this.props;
 
     return (
       <form>
         <h3>Login</h3>
-        <input
-          data-testid="input-player-name"
-          type="text"
-          name="name"
-          placeholder="Digite seu nome"
-          value={ name }
-          onChange={ this.handleChange }
-        />
-        <input
-          data-testid="input-gravatar-email"
-          type="email"
-          name="email"
-          placeholder="Digite seu email gravatar"
-          value={ email }
-          onChange={ this.handleChange }
-        />
+        <label htmlFor="name">
+          <p>Player Name</p>
+          <input
+            data-testid="input-player-name"
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Type your name"
+            value={ name }
+            onChange={ this.handleChange }
+          />
+        </label>
+        <label htmlFor="email">
+          <p>Gravatar Email</p>
+          <input
+            id="email"
+            data-testid="input-gravatar-email"
+            type="email"
+            name="email"
+            placeholder="Type your gravatar email"
+            value={ email }
+            onChange={ this.handleChange }
+          />
+        </label>
         <button
           data-testid="btn-play"
           type="button"
@@ -53,13 +69,29 @@ class Login extends Component {
         >
           Play
         </button>
+        <button
+          data-testid="btn-settings"
+          type="button"
+          onClick={ (evt) => {
+            evt.preventDefault();
+            history.push('/settings');
+          } }
+        >
+          Settings
+        </button>
       </form>
     );
   }
 }
 
 Login.propTypes = {
+  responseCode: PropTypes.number.isRequired,
   dispatch: PropTypes.func,
 }.isRequired;
 
-export default connect()(Login);
+const mapStateToProps = (state) => ({
+  questions: state.questions.questions,
+  responseCode: state.questions.responseCode,
+});
+
+export default connect(mapStateToProps)(Login);
