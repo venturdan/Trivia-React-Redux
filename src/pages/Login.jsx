@@ -19,8 +19,16 @@ class Login extends Component {
     const { dispatch, history } = this.props;
     dispatch(login(this.state));
     await dispatch(fetchUserToken());
-    dispatch(fetchQuestions(localStorage.getItem('token')));
-    history.push('/game');
+    await dispatch(fetchQuestions(localStorage.getItem('token')));
+    const errCode = 3;
+    const { responseCode } = this.props;
+    console.log(responseCode);
+    if (errCode === responseCode) {
+      localStorage.removeItem('token');
+      history.push('/');
+    } else {
+      history.push('/game');
+    }
   };
 
   render() {
@@ -78,7 +86,13 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  responseCode: PropTypes.number.isRequired,
   dispatch: PropTypes.func,
 }.isRequired;
 
-export default connect()(Login);
+const mapStateToProps = (state) => ({
+  questions: state.questions.questions,
+  responseCode: state.questions.responseCode,
+});
+
+export default connect(mapStateToProps)(Login);
