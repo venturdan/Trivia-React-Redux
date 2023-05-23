@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
 import { saveTimer } from '../Redux/Actions/indexActions';
@@ -64,7 +64,7 @@ class Game extends Component {
 
   handleNextQuestion = () => {
     const { index } = this.state;
-    const { questions } = this.props;
+    const { questions, history } = this.props;
     if (index < questions.length - 1) {
       this.setState((prevState) => {
         const nextIndex = prevState.index + 1;
@@ -76,7 +76,7 @@ class Game extends Component {
         };
       });
     } else {
-      // Feedback / ranking
+      history.push('/feedback');
     }
   };
 
@@ -135,7 +135,13 @@ class Game extends Component {
             })}
           </div>
           {selectedAnswer !== null && (
-            <button onClick={ this.handleNextQuestion }>Next</button>
+            <button
+              data-testid="btn-next"
+              onClick={ this.handleNextQuestion }
+            >
+              Next
+
+            </button>
           )}
         </section>
       </div>
@@ -148,16 +154,17 @@ const mapStateToProps = (state) => ({
   timer: state.timer.timer,
 });
 Game.propTypes = {
-  questions: propTypes.arrayOf(
-    propTypes.shape({
-      question: propTypes.string.isRequired,
-      category: propTypes.string,
-      correct_answer: propTypes.string.isRequired,
-      incorrect_answers: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
-    }),
-  ).isRequired,
-  timer: propTypes.number.isRequired,
-  dispatch: propTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  questions: PropTypes.arrayOf(PropTypes.shape({
+    question: PropTypes.string.isRequired,
+    category: PropTypes.string,
+    correct_answer: PropTypes.string.isRequired,
+    incorrect_answers: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  })).isRequired,
+  timer: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(Game);
