@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
-import { saveTimer } from '../Redux/Actions/indexActions';
+import { saveTimer, updateScore } from '../Redux/Actions/indexActions';
 
 class Game extends Component {
   state = {
@@ -59,7 +59,30 @@ class Game extends Component {
   };
 
   handleAnswerClick = (isCorrect) => {
+    const { timer, dispatch, questions } = this.props;
+    const { index } = this.state;
+    const { difficulty } = questions[index];
+
     this.setState({ selectedAnswer: isCorrect, isCorrect });
+
+    const EASY_MULTIPLIER = 1;
+    const MEDIUM_MULTIPLIER = 2;
+    const HARD_MULTIPLIER = 3;
+    const BASE_POINTS = 10;
+
+    let points = BASE_POINTS;
+
+    if (difficulty === 'hard') {
+      points += timer * HARD_MULTIPLIER;
+    } else if (difficulty === 'medium') {
+      points += timer * MEDIUM_MULTIPLIER;
+    } else {
+      points += timer * EASY_MULTIPLIER;
+    }
+
+    if (isCorrect) {
+      dispatch(updateScore(points));
+    }
   };
 
   handleNextQuestion = () => {
@@ -154,17 +177,20 @@ const mapStateToProps = (state) => ({
   timer: state.timer.timer,
 });
 Game.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func,
+    push: PropTypes.func.isRequired,
   }).isRequired,
-  questions: PropTypes.arrayOf(PropTypes.shape({
-    question: PropTypes.string.isRequired,
-    category: PropTypes.string,
-    correct_answer: PropTypes.string.isRequired,
-    incorrect_answers: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  })).isRequired,
+  questions: PropTypes.arrayOf(
+    PropTypes.shape({
+      question: PropTypes.string.isRequired,
+      category: PropTypes.string,
+      correct_answer: PropTypes.string.isRequired,
+      incorrect_answers: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+      difficulty: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   timer: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(Game);
